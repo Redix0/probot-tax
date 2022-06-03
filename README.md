@@ -1,6 +1,6 @@
 ## What is probot-taxes ?
 Package that can calculate Probot taxes perfectly .\
-Command Example :
+Command Example:
 ![image](image.png)
 ## Installation
 ```
