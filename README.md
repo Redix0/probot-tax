@@ -1,7 +1,7 @@
 ## What is probot-taxes ?
-
-[![npm version](https://badge.fury.io/js/probot-taxes.svg)](https://npmjs.org/package/probot-taxes)  [![downloads](https://img.shields.io/npm/dw/probot-taxes.svg)](https://npmjs.org/package/probot-taxes)
-
+Package that can calculate Probot taxes perfectly .\
+Command Example :
+![image](image.png)
 ## Installation
 ```
 npm install probot-taxes
@@ -15,14 +15,23 @@ let Taxes = require('probot-taxes')
 client.on('messageCreate', message => {
     if (!message.guild) return;
     if (message.author.bot) return;
-    if (message.content.toLowerCase.startsWith('tax')) {
+    if (message.content.toLowerCase().startsWith('tax')) {
     let amount = message.content.split(' ')[1]
-    if (isNaN(amount)) return message.reply({content: `Amount should be a number .`})
-    let Tax = Taxes(Number(amount))
+    if (!amount) return message.reply({content: `You should specify a vaild amount .`})
+    let Tax;
+    try {
+    Tax = Taxes(amount)
+    } catch (err) {
+    return message.reply({content: `You should specify a vaild amount .`})
+    }
     let embed = new Discord.MessageEmbed()
     .setTitle('Probot Tax')
     .addField(`Difference`, `${Tax.difference}`)
     .addField(`Tax`, `${Tax.tax}`)
+    .setColor('BLURPLE')
+    .setThumbnail(client.user.avatarURL())
+    .setFooter({text: `Requested By ${message.author.tag}`, iconURL: message.author.avatarURL({dynamic:true})})
+    .setTimestamp()
     .addField(`Wasit (Middleman)`, `${Tax.wasit}`)
     message.reply({embeds: [embed]})
     }
